@@ -1,0 +1,8 @@
+__pycache__
+.idea
+apps/__pycache__
+apps/cart/__pycache__
+apps/goods/__pycache__
+apps/order/__pycache__
+apps/user/__pycache__
+
