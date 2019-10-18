@@ -1,0 +1,32 @@
+{# 详情页、列表页 #}
+{% extends 'base.html' %}
+
+{# 网站主体内容块 #}
+{% block body %}
+    <div class="navbar_con">
+        <div class="navbar clearfix">
+            <div class="subnav_con fl">
+                <h1>全部商品分类</h1>
+                <span></span>
+                <url class="subnav">
+                    <li href="#" class="fruit">新鲜水果</li>
+                    <li href="#" class="seafood">海鲜水产</li>
+                    <li href="#" class="meet">猪牛羊肉</li>
+                    <li href="#" class="egg">禽类蛋品</li>
+                    <li href="#" class="vegetables">新鲜蔬菜</li>
+                    <li href="#" class="ice">速冻产品</li>
+                </url>
+            </div>
+            <url class="navlist fl">
+                <li>首页</li>
+                <li>|</li>
+                <li>手机生鲜</li>
+                <li>|</li>
+                <li>抽奖</li>
+            </url>
+        </div>
+    </div>
+    {# 详情页，列表页主体内容块 #}
+    {% block main_content %}{% endblock %}
+{% endblock %}
+
