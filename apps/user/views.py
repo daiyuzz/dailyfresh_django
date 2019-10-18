@@ -11,6 +11,7 @@ from itsdangerous import SignatureExpired
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from celery_tasks.tasks import send_register_active_email
+from utils.mixin import LoginRequiredMixin
 
 
 # Create your views here.
@@ -138,25 +139,27 @@ class LoginView(View):
 
 
 # /user
-class UserInfoView(View):
+class UserInfoView(LoginRequiredMixin, View):
     '''用户中心-信息页'''
 
     def get(self, request):
         page = 'user'
-        return render(request, 'user/user_center_info.html',{'page':page})
+        return render(request, 'user/user_center_info.html', {'page': page})
+
 
 # /user/order
-class UserOrderView(View):
+class UserOrderView(LoginRequiredMixin, View):
     '''用户中心-订单页'''
 
     def get(self, request):
         page = 'order'
-        return render(request, 'user/user_center_order.html',{'page':page})
+        return render(request, 'user/user_center_order.html', {'page': page})
+
 
 # /user/address
-class AddressView(View):
+class AddressView(LoginRequiredMixin, View):
     '''用户中心-地址页'''
 
     def get(self, request):
         page = 'address'
-        return render(request, 'user/user_center_site.html',{'page':page})
+        return render(request, 'user/user_center_site.html', {'page': page})
