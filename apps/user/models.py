@@ -21,7 +21,7 @@ class Address(BaseModel):
     addr = models.CharField(max_length=256,verbose_name='收件地址')
     zip_code = models.CharField(max_length=6,null=True,verbose_name='邮政编码')
     phone = models.CharField(max_length=11,verbose_name='联系电话')
-    id_default = models.BooleanField(default=False,verbose_name='是否默认')
+    is_default = models.BooleanField(default=False,verbose_name='是否默认')
 
     class Meta:
         db_table = 'df_address'
