@@ -9,7 +9,7 @@ from django.views.generic import View
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import SignatureExpired
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 from celery_tasks.tasks import send_register_active_email
 from utils.mixin import LoginRequiredMixin
 
@@ -138,13 +138,25 @@ class LoginView(View):
             return render(request, 'user/login.html', {'errmsg': '用户名或密码错误'})
 
 
+# /user/logout
+class LogoutView(View):
+    '''退出登录'''
+    def get(self,request):
+        logout(request)
+        # 清除session
+        return redirect(reverse('goods:index'))
+
 # /user
 class UserInfoView(LoginRequiredMixin, View):
     '''用户中心-信息页'''
 
     def get(self, request):
-        page = 'user'
-        return render(request, 'user/user_center_info.html', {'page': page})
+        # request.user
+        # 如果用户未登录->AnonymousUser 类的一个实例
+        # 如果用户登录-> User类的一个实例
+        # request.user.authenticated()
+        # 除了你给模板文件传递给模板变量之外，Django框架还会把request.user也传递给模板文件。
+        return render(request, 'user/user_center_info.html', {'page': 'user'})
 
 
 # /user/order
@@ -152,8 +164,8 @@ class UserOrderView(LoginRequiredMixin, View):
     '''用户中心-订单页'''
 
     def get(self, request):
-        page = 'order'
-        return render(request, 'user/user_center_order.html', {'page': page})
+
+        return render(request, 'user/user_center_order.html', {'page': 'order'})
 
 
 # /user/address
@@ -161,5 +173,5 @@ class AddressView(LoginRequiredMixin, View):
     '''用户中心-地址页'''
 
     def get(self, request):
-        page = 'address'
-        return render(request, 'user/user_center_site.html', {'page': page})
+
+        return render(request, 'user/user_center_site.html', {'page': 'address'})

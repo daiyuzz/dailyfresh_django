@@ -160,7 +160,6 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-
 # 设置登录url(login_required进行登录限制时，由于写的是视图类，而login_required作用于视图函数，所以将login_required作用与url上)
 LOGIN_URL = '/user/login'
 
