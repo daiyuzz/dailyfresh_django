@@ -149,7 +149,7 @@ EMAIL_FROM = 'daiyu<1461562548@qq.com>'
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/3",
+        "LOCATION": "redis://106.12.78.90:6379/3",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -160,7 +160,16 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-# 设置登录url(login_required进行登录限制时，由于写的是视图类，而login_required作用于视图函数，所以将login_required作用与url上)
+# 设置登录url(login_required进行登录)
 LOGIN_URL = '/user/login'
+
+# 设置django的文件存储类
+DEFAULT_FILE_STORAGE = 'utils.fdfs.storage.FDFSStorage'
+
+# 设置fastdfs使用的fdfs_client_conf配置文件
+FDFS_CLIENT_CONF = './utils/fdfs/client.conf'
+
+# 设置fdfs存储服务器上的nginx的IP和端口号
+FDFS_URL = 'HTTP://106.12.78.90:8888'
 
 
