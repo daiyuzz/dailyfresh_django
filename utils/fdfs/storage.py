@@ -2,6 +2,7 @@ from django.core.files.storage import Storage
 from fdfs_client.client import *
 from django.conf import settings
 
+
 class FDFSStorage(Storage):
     '''fastdfs文件存储'''
 
