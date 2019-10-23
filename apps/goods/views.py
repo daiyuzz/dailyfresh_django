@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from django.views.generic import View
 from apps.goods.models import GoodsType, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
+from django_redis import get_redis_connection
 
 
 # Create your views here.
@@ -28,7 +29,15 @@ class IndexView(View):
         # image_banners和title_banners属性会随着types一起传递
 
         # 获取用户购物车中商品的数目
-        cart_count = 0
+        user = request.user
+        if user.is_authenticated():
+            # 用户已登录
+            conn = get_redis_connection('default')
+            cart_key = 'cart_%d' % user.id
+            cart_count = conn.hlen(cart_key)
+        else:
+            # 用户未登录
+            cart_count = 0
         context = {
             'types': types,
             'goods_banners': goods_banners,
