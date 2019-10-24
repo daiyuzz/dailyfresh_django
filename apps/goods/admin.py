@@ -1,11 +1,42 @@
 from django.contrib import admin
-from apps.goods.models import GoodsType,IndexPromotionBanner
+from apps.goods.models import GoodsType, IndexPromotionBanner, IndexTypeGoodsBanner, IndexGoodsBanner
+from celery_tasks.tasks import generate_static_index_html
+
+
 # Register your models here.
 
-class IndexPromotionBannerAdmin(admin.ModelAdmin):
+class BaseModelAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         '''新增或更新表中数据时调用'''
-        pass
+        super().save_model(request, obj, form, change)
 
-admin.site.register(GoodsType)
-admin.site.register(IndexPromotionBanner)
+        # 发出任务让celery worker重新生成首页静态页
+        generate_static_index_html.delay()
+
+    def delete_model(self, request, obj):
+        '''删除表中的数据时调用'''
+        super().delete_model(request.obj)
+        # 发出任务，让celery work重新生成首页静态页
+        generate_static_index_html.delay()
+
+
+class GoodsTypeAdmin(BaseModelAdmin):
+    pass
+
+
+class IndexGoodsBannerAdmin(BaseModelAdmin):
+    pass
+
+
+class IndexTypeGoodsBannerAdmin(BaseModelAdmin):
+    pass
+
+
+class IndexPromotionBannerAdmin(BaseModelAdmin):
+    pass
+
+
+admin.site.register(GoodsType, GoodsTypeAdmin)
+admin.site.register(IndexGoodsBanner, IndexGoodsBannerAdmin)
+admin.site.register(IndexTypeGoodsBanner, IndexTypeGoodsBannerAdmin)
+admin.site.register(IndexPromotionBanner, IndexPromotionBannerAdmin)
