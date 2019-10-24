@@ -5,6 +5,7 @@ from apps.goods.models import GoodsType,IndexPromotionBanner
 class IndexPromotionBannerAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         '''新增或更新表中数据时调用'''
+        pass
 
 admin.site.register(GoodsType)
 admin.site.register(IndexPromotionBanner)
