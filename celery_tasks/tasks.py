@@ -4,7 +4,8 @@ from celery import Celery
 from django.conf import settings
 from django.core.mail import send_mail
 from django_redis import get_redis_connection
-from django.template import loader,RequestContext
+from django.template import loader, RequestContext
+
 # 创建一个celery类的实例对象
 app = Celery('celery_tasks.tasks', broker='redis://106.12.78.90:6379/8')
 
@@ -69,7 +70,6 @@ def generate_static_index_html():
     # 3.模板渲染
     static_index_html = temp.render(context)
     # 生成首页对应静态文件
-    save_path = os.path.join(settings.BASE_DIR,'static/index.html')
-    with open(save_path,'w') as f:
+    save_path = os.path.join(settings.BASE_DIR, 'static/index.html')
+    with open(save_path, 'w') as f:
         f.write(static_index_html)
-
