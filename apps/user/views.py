@@ -10,9 +10,9 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import SignatureExpired
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
-from redis import StrictRedis
 from django_redis import get_redis_connection
 from celery_tasks.tasks import send_register_active_email
+# from utils.mixin import LoginRequiredMixin
 from utils.mixin import LoginRequiredMixin
 from .models import Address
 from apps.goods.models import GoodsSKU
@@ -69,7 +69,6 @@ class RegisterView(View):
         # 发邮件
         # send_register_active_email由app.task修饰，使其有delay属性
         send_register_active_email.delay(email, username, token)
-
         return redirect(reverse('goods:index'))
 
 

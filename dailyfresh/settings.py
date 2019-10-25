@@ -172,3 +172,5 @@ FDFS_CLIENT_CONF = './utils/fdfs/client.conf'
 # 设置fdfs存储服务器上的nginx的IP和端口号
 FDFS_URL = 'http://106.12.78.90:8888/'
 
+# 解决部分版本的django的authenticate验证不成功
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
