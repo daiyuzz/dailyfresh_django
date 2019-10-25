@@ -1,5 +1,6 @@
+import os
 import re
-
+import sys
 from django.http import HttpResponse
 
 from .models import User
@@ -12,7 +13,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django_redis import get_redis_connection
 from celery_tasks.tasks import send_register_active_email
-# from utils.mixin import LoginRequiredMixin
+sys.path.append(os.getcwd())
 from utils.mixin import LoginRequiredMixin
 from .models import Address
 from apps.goods.models import GoodsSKU

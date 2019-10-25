@@ -62,7 +62,7 @@ def generate_static_index_html():
     }
 
     # 使用模板
-    # 1.加载模板
+    # 1.加载模板import os
     temp = loader.get_template('goods/static_index.html')
     # 2.定义模板上下文
     # context = RequestContext(request,context)
