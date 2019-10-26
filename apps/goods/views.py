@@ -9,7 +9,6 @@ from django_redis import get_redis_connection
 
 class IndexView(View):
     '''首页'''
-
     def get(self, request):
         # 尝试从缓存中获取数据
         context = cache.get('index_page_data')
