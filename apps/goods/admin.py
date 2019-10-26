@@ -20,23 +20,27 @@ class BaseModelAdmin(admin.ModelAdmin):
         generate_static_index_html.delay()
 
 
-class GoodsTypeAdmin(BaseModelAdmin):
-    pass
+# class GoodsTypeAdmin(BaseModelAdmin):
+#     pass
+#
+#
+# class IndexGoodsBannerAdmin(BaseModelAdmin):
+#     pass
+#
+#
+# class IndexTypeGoodsBannerAdmin(BaseModelAdmin):
+#     pass
+#
+#
+# class IndexPromotionBannerAdmin(BaseModelAdmin):
+#     pass
 
 
-class IndexGoodsBannerAdmin(BaseModelAdmin):
-    pass
-
-
-class IndexTypeGoodsBannerAdmin(BaseModelAdmin):
-    pass
-
-
-class IndexPromotionBannerAdmin(BaseModelAdmin):
-    pass
-
-
-admin.site.register(GoodsType, GoodsTypeAdmin)
-admin.site.register(IndexGoodsBanner, IndexGoodsBannerAdmin)
-admin.site.register(IndexTypeGoodsBanner, IndexTypeGoodsBannerAdmin)
-admin.site.register(IndexPromotionBanner, IndexPromotionBannerAdmin)
+# admin.site.register(GoodsType, GoodsTypeAdmin)
+# admin.site.register(IndexGoodsBanner, IndexGoodsBannerAdmin)
+# admin.site.register(IndexTypeGoodsBanner, IndexTypeGoodsBannerAdmin)
+# admin.site.register(IndexPromotionBanner, IndexPromotionBannerAdmin)
+admin.site.register(GoodsType, BaseModelAdmin)
+admin.site.register(IndexGoodsBanner, BaseModelAdmin)
+admin.site.register(IndexTypeGoodsBanner, BaseModelAdmin)
+admin.site.register(IndexPromotionBanner, BaseModelAdmin)
