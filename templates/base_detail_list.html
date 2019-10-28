@@ -9,12 +9,9 @@
                 <h1>全部商品分类</h1>
                 <span></span>
                 <url class="subnav">
-                    <li href="#" class="fruit">新鲜水果</li>
-                    <li href="#" class="seafood">海鲜水产</li>
-                    <li href="#" class="meet">猪牛羊肉</li>
-                    <li href="#" class="egg">禽类蛋品</li>
-                    <li href="#" class="vegetables">新鲜蔬菜</li>
-                    <li href="#" class="ice">速冻产品</li>
+                    {% for type in types %}
+                        <li href="#" class="{{ type.logo }}">{{ type.name }}</li>
+                    {% endfor %}
                 </url>
             </div>
             <url class="navlist fl">

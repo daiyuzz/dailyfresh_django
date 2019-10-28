@@ -1,14 +1,17 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse
+from django.urls import reverse
 from django.views.generic import View
 from django.core.cache import cache
-from apps.goods.models import GoodsType, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
+from apps.goods.models import GoodsType, GoodsSKU, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
 from django_redis import get_redis_connection
+from apps.order.models import OrderGoods
 
 
 # Create your views here.
 
 class IndexView(View):
     '''首页'''
+
     def get(self, request):
         # 尝试从缓存中获取数据
         context = cache.get('index_page_data')
@@ -53,3 +56,44 @@ class IndexView(View):
             cart_count = 0
         context.update(cart_count=cart_count)
         return render(request, 'goods/index.html', context=context)
+
+
+# goods/goods_id
+class DetailView(View):
+    '''详情页'''
+
+    def get(self, request, goods_id):
+        try:
+            sku = GoodsSKU.objects.get(id=goods_id)
+        except GoodsSKU.DoesNotExist:
+            # 商品不存在,跳转首页
+            return redirect(reverse('goods:index'))
+        # 获取商品的分类信息
+        types = GoodsType.objects.all()
+        # 　获取商品的评论信息（exclude返回不满足的结果）
+        sku_orders = OrderGoods.objects.filter(sku=sku).exclude(commet='')
+
+        # 获取新品信息
+        new_skus = GoodsSKU.objects.filter(type=sku.type).order_by('-create_time')
+
+        # 获取用户购物车中商品的数目
+        user = request.user
+        if user.is_authenticated():
+            # 用户已登录
+            conn = get_redis_connection('default')
+            cart_key = 'cart_%d' % user.id
+            cart_count = conn.hlen(cart_key)
+        else:
+            # 用户未登录
+            cart_count = 0
+
+        # 组织模板上下文
+        context = {
+            'sku': sku,
+            'types': types,
+            'sku_orders': sku_orders,
+            'new_skus': new_skus,
+            'cart_count': cart_count,
+        }
+
+        return render(request, 'goods/detail.html', context=context)
