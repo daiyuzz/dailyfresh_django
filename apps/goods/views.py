@@ -75,7 +75,7 @@ class DetailView(View):
         sku_orders = OrderGoods.objects.filter(sku=sku).exclude(commet='')
 
         # 获取新品信息
-        new_skus = GoodsSKU.objects.filter(type=sku.type).order_by('-create_time')[:2]
+        new_skus = GoodsSKU.objects.filter(type=sku.type).exclude(id=goods_id).order_by('-create_time')[:2]
 
         # 获取同一个SPU的其他规格的商品
         same_spu_skus = GoodsSKU.objects.filter(goods=sku.goods).exclude(id=goods_id)
@@ -126,12 +126,11 @@ class ListView(View):
         except GoodsType.DoesNotExist:
             # 种类不存在
             return redirect(reverse('goods:index'))
-        # 获取排序的方式
+        # todo:获取排序的方式
         # sort=default按照默认方式排序，
         # sort = price，按照价格排序
         # sort = hot，按照销量排序
         sort = request.GET.get('sort')
-
 
         if sort == 'price':
             skus = GoodsSKU.objects.filter(type=type).order_by('price')
@@ -159,7 +158,7 @@ class ListView(View):
         # 获取第page页的实例对象
         skus_page = paginator.page(page)
 
-        # 进行页码的控制，页面上最多显示5个页码
+        # todo:进行页码的控制，页面上最多显示5个页码
         # 1.总页数小于5页，页面上显示所有页码
         # 2.如果当前页是前3页，显示1～5页页码
         # 3.如果当前页是后3页，显示后5页
@@ -195,7 +194,7 @@ class ListView(View):
             'new_skus': new_skus,
             'cart_count': cart_count,
             'sort': sort,
-            'pages':pages
+            'pages': pages
         }
 
         return render(request, 'goods/list.html', context=context)
