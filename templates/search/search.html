@@ -8,7 +8,7 @@
     </div>
 
     <div class="main_wrap clearfix">
-        <ul>
+        <ul class="goods_type_list clearfix">
             {% for item in page %}
                 <li>
                     <a href="{% url 'goods:detail' item.object.id %}"><img src="{{ item.object.image.url }}"></a>
@@ -28,13 +28,12 @@
                 <a href="/search?q={{ query }}%page={{ page.previous_page_number }}">上一页</a>
             {% endif %}
 
-            {% for pindex in paginator.page.range %}
+            {% for pindex in paginator.page_range %}
                 {% if pindex == page.number %}
                     <a href="/search?q={{ query }}&page={{ pindex }}" class="active">{{ pindex }}</a>
                 {% else %}
                     <a href="/search?q={{ query }}&page={{ pindex }}">{{ pindex }}</a>
                 {% endif %}
-
             {% endfor %}
 
             {# 有下一页 #}
