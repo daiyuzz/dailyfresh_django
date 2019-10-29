@@ -8,19 +8,19 @@
             <div class="subnav_con fl">
                 <h1>全部商品分类</h1>
                 <span></span>
-                <url class="subnav">
+                <ul class="subnav">
                     {% for type in types %}
-                        <li href="{% url 'goods:list' type 1%}" class="{{ type.logo }}">{{ type.name }}</li>
+                        <li><a href="{% url 'goods:list' type.id 1 %}" class="{{ type.logo }}">{{ type.name }}</a></li>
                     {% endfor %}
-                </url>
+                </ul>
             </div>
-            <url class="navlist fl">
-                <li>首页</li>
+            <ul class="navlist fl">
+                <li><a>首页</a></li>
                 <li>|</li>
-                <li>手机生鲜</li>
+                <li><a>手机生鲜</a></li>
                 <li>|</li>
-                <li>抽奖</li>
-            </url>
+                <li><a>抽奖</a></li>
+            </ul>
         </div>
     </div>
     {# 详情页，列表页主体内容块 #}

@@ -90,14 +90,13 @@ class DetailView(View):
 
             # 添加用户历史浏览记录
             conn = get_redis_connection('default')
-            history_key = 'hostory_%d' % user.id
+            history_key = 'history_%d' % user.id
             # 移除列表中的goods_id,
             conn.lrem(history_key, 0, goods_id)
             # 把goods_id插入列表中（左侧插入）
             conn.lpush(history_key, goods_id)
             # 只保存用户最新浏览的5条信息
             conn.ltrim(history_key, 0, 4)
-
         else:
             # 用户未登录
             cart_count = 0
@@ -111,7 +110,6 @@ class DetailView(View):
             'same_spu_skus': same_spu_skus,
             'cart_count': cart_count,
         }
-
         return render(request, 'goods/detail.html', context=context)
 
 
@@ -133,7 +131,7 @@ class ListView(View):
         # sort = price，按照价格排序
         # sort = hot，按照销量排序
         sort = request.GET.get('sort')
-        page = request.GET.get('page')
+
 
         if sort == 'price':
             skus = GoodsSKU.objects.filter(type=type).order_by('price')
@@ -161,6 +159,21 @@ class ListView(View):
         # 获取第page页的实例对象
         skus_page = paginator.page(page)
 
+        # 进行页码的控制，页面上最多显示5个页码
+        # 1.总页数小于5页，页面上显示所有页码
+        # 2.如果当前页是前3页，显示1～5页页码
+        # 3.如果当前页是后3页，显示后5页
+        # 4.其他情况，显示当前页的前两页，当前页，当前页的后两页
+        num_pages = paginator.num_pages
+        if num_pages < 5:
+            pages = range(1, num_pages + 1)
+        elif page <= 3:
+            pages = range(1, 6)
+        elif num_pages - page <= 2:
+            pages = range(num_pages - 4, num_pages + 1)
+        else:
+            pages = range(page - 2, page + 3)
+
         # 获取新品信息
         new_skus = GoodsSKU.objects.filter(type=type).order_by('-create_time')[:2]
 
@@ -182,6 +195,7 @@ class ListView(View):
             'new_skus': new_skus,
             'cart_count': cart_count,
             'sort': sort,
+            'pages':pages
         }
 
-        return render(request, 'goods/list.html')
+        return render(request, 'goods/list.html', context=context)

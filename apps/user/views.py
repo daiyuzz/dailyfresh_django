@@ -186,7 +186,9 @@ class UserInfoView(LoginRequiredMixin, View):
         # 组织上下文
         context = {'page': 'user',
                    'address': address,
-                   'goods_li': goods_li}
+                   'goods_li': goods_li,
+
+                   }
 
         return render(request, 'user/user_center_info.html', context=context)
 
