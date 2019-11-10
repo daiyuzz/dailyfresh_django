@@ -12,6 +12,9 @@ from django_redis import get_redis_connection
 # 如果涉及到数据的修改（新增、更新、删除）采用post，如果只涉及数据的获取，采用get。
 # 2）传递参数：商品id（sku_id） 商品数量(count)
 
+# ajax发起的请求都在后台，在浏览器中看不出效果，所以验证用户是否登录不能用Mixin
+# /cart/add
+
 class CartAddView(View):
     '''购物车记录添加'''
 
@@ -55,3 +58,12 @@ class CartAddView(View):
         total_count = conn.hlen(cart_key)
         # 返回应答
         return JsonResponse({'res': 5, 'total_count': total_count, 'message': '添加成功'})
+
+
+# /cart/
+class CartInfoView(View):
+    '''购物车显示页'''
+
+    def get(self, request):
+        '''显示'''
+        return render(request, 'cart/cart.html')
