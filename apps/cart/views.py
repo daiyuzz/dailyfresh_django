@@ -3,6 +3,7 @@ from django.views.generic import View
 from django.http import JsonResponse
 from apps.goods.models import GoodsSKU
 from django_redis import get_redis_connection
+from utils.mixin import LoginRequiredMixin
 
 
 # Create your views here.
@@ -61,9 +62,40 @@ class CartAddView(View):
 
 
 # /cart/
-class CartInfoView(View):
+class CartInfoView(LoginRequiredMixin, View):
     '''购物车显示页'''
 
     def get(self, request):
         '''显示'''
-        return render(request, 'cart/cart.html')
+        # 　获取登录用户
+        user = request.user
+        # 获取用户购物车中商品的信息
+        conn = get_redis_connection('default')
+        cart_key = 'cart_%d' % user.id
+        # {'商品id':'商品数量'}
+        cart_dict = conn.hgetall(cart_key)
+
+        skus = []
+        # 保存购物车中商品的总数目和总价格
+        total_count = 0
+        total_price = 0
+        # 遍历获取商品信息
+        for sku_id, count in cart_dict.items():
+            sku = GoodsSKU.objects.get(id=sku_id)
+            # 计算商品小计
+            amount = sku.price * int(count)
+            # 动态给sk增加amount属性,保存商品的小计
+            sku.amount = amount
+            # 动态给sku增加count属性，保存购物车中对应商品的数量
+            sku.count = count
+            skus.append(sku)
+            total_count += int(count)
+            total_price += amount
+
+        context = {
+            'total_count': total_count,
+            'total_price': total_price,
+            'skus': skus,
+        }
+
+        return render(request, 'cart/cart.html', context=context)
