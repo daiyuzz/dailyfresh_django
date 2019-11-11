@@ -139,5 +139,12 @@ class CartUpdateView(View):
             return JsonResponse({'res': 4, 'errmsg': '商品庫存不足'})
         # 更新
         conn.hset(cart_key, sku_id, count)
+
+        # 计算用户购物车中的商品的总件数 {‘1’:5，‘2’:4}
+        total_count = 0
+        vals = conn.hvals(cart_key)
+        for val in vals:
+            total_count += int(val)
+
         # 返回应答
-        return JsonResponse({'res': 5, 'message': '更新成功'})
+        return JsonResponse({'res': 5,'total_count':total_count, 'message': '更新成功'})
