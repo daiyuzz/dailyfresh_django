@@ -12,7 +12,7 @@ itsdangerous==1.1.0
 kombu==4.6.4
 more-itertools==7.2.0
 mutagen==1.42.0
-Pillow==6.1.0
+Pillow==9.0.0
 py3Fdfs==2.2.0
 PyMySQL==0.9.3
 pytz==2019.2
